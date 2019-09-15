@@ -1,30 +1,34 @@
+//ES6 syntax module
+import SpriteSheet from './SpriteSheet.js';
+import { loadImage, loadLevel } from './loaders.js';
 
-    //ES6 syntax module
-    import SpriteSheet from './SpriteSheet.js';
 
-    function loadImage(url){
-      return new Promise(resolve=>{
-        const image = new Image();
+loadImage('/assets/tiles.png').
+then(image => {
 
-        image.addEventListener('load', ()=>{
-          resolve(image);
-        })
+    const sprites = new SpriteSheet(image, 16, 16);
+    sprites.define('ground', 0, 0);
+    sprites.define('sky', 3, 23);
 
-        image.src= url;
-      });
+    loadLevel('1-1').then(level=>{
+    	console.log(level);
+    })
+
+    for (let x = 0; x < 25; ++x) {
+        for (let y = 0; y < 14; ++y) {
+            sprites.drawTile('sky', context, x, y);
+        }
     }
 
-   
-    loadImage('/assets/tiles.png').
-      then(image=>{
+    for (let x = 0; x < 25; ++x) {
+        for (let y = 12; y < 14; ++y) {
+            sprites.drawTile('ground', context, x, y);
+        }
+    }
 
-        const sprites = new SpriteSheet(image,16,16);
-        sprites.define('ground',0,0);
-        sprites.draw('ground',context,45,65);
 
-      });
-    const canvas = document.getElementById("screen");
-    const context = canvas.getContext("2d");
+});
+const canvas = document.getElementById("screen");
+const context = canvas.getContext("2d");
 
-    context.fillRect(0, 0, 50, 50);
-
+context.fillRect(0, 0, 50, 50);
